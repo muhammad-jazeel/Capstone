@@ -1,0 +1,343 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div id="wrapper">
+    <!-- Header Section -->
+    <header class="transparent scroll-light has-topbar">
+        <div id="topbar" class="topbar-dark text-light"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="de-flex sm-pt10">
+                        <div class="de-flex-col">
+                            <div id="logo">
+                                <a href="{% static 'index.html' %}">
+                                    <img class="logo-1" src="{% static 'images/logo-AUTOASSIST-light.png' %}" alt="logo"
+                                        style="height: 100px; width: 100px;">
+                                    <img class="logo-2" src="{% static 'images/logo-AUTOASSIST.png' %}" alt="logo"
+                                        style="height: 100px; width: 100px;">
+                                </a>
+                            </div>
+                        </div>
+                        {% include 'includes/customer_navbar.html' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Header Close -->
+
+    <!-- Content Section -->
+    <div class="no-bottom no-top zebra" id="content">
+        <div id="top"></div>
+
+        <!-- Subheader Section -->
+        <section id="subheader" class="jarallax text-light">
+            <img src="{% static 'images/background/14.jpg' %}" class="jarallax-img" alt="">
+            <div class="center-y relative text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h1>Dashboard</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-dashboard" class="bg-gray-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 mb30">
+                        {% include 'includes/customer_sidenavbar.html' %}
+                    </div>
+
+                    <div class="col-lg-9">
+                        <!-- Upcoming Bookings Section -->
+                        {% if upcoming_bookings %}
+                        <h4 class="text-primary mb-3">Upcoming Bookings</h4>
+                        <div class="row">
+                            {% for booking in upcoming_bookings %}
+                            <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
+                                <div class="de-item reduced-width">
+                                    <div class="d-info p-3">
+                                        <h4 class="mb-2">{{ booking.service.name }}</h4>
+                                        <div class="d-atr-group mb-2">
+                                            <span class="d-atr me-3">
+                                                <i class="fa fa-building text-primary"></i>
+                                                {% if booking.service.user.vendor %}
+                                                {{ booking.service.user.vendor.business_name }}
+                                                {% else %}
+                                                <span class="text-muted">N/A</span>
+                                                {% endif %}
+                                            </span>
+                                            <span class="d-atr">
+                                                <i class="fa fa-calendar text-primary"></i>
+                                                {{ booking.service_date }}
+                                            </span>
+                                        </div>
+                                        <div class="d-atr-group mb-2">
+                                            <span class="d-atr me-3">
+                                                <i class="fa fa-clock text-primary"></i>
+                                                {{ booking.time_slot.time }}
+                                            </span>
+                                            <span class="d-atr">
+                                                <i class="fa fa-car text-primary"></i>
+                                                {{ booking.car_registration }}
+                                            </span>
+                                        </div>
+                                        <span class="badge {% if booking.status == 'confirmed' %}bg-success
+                    {% elif booking.status == 'pending' %}bg-warning
+                    {% else %}bg-danger{% endif %}">
+                                            {{ booking.status|title }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="text-center text-muted">
+                            <p>No upcoming bookings found.</p>
+                        </div>
+                        {% endif %}
+
+                        <!-- Upcoming Pickups Section -->
+                        <h4 class="text-primary mb-3 mt-5">Upcoming Pickups</h4>
+                        <div class="row">
+                            {% if upcoming_pickups %}
+                            {% for order in upcoming_pickups %}
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                <div class="de-item compact-card">
+                                    <div class="d-info p-3">
+                                        <h5 class="mb-2">{{ order.product.name }}</h5>
+                                        <div class="d-atr-group mb-2">
+                                            <span class="d-atr me-2">
+                                                <i class="fa fa-store text-primary"></i>
+                                                {{ order.vendor.business_name }}
+                                            </span>
+                                        </div>
+                                        <div class="d-atr-group mb-2">
+                                            <span class="d-atr me-2">
+                                                <i class="fa fa-calendar text-primary"></i>
+                                                {{ order.pickup_date }}
+                                            </span>
+                                            <span class="d-atr">
+                                                <i class="fa fa-clock text-primary"></i>
+                                                {{ order.pickup_time }}
+                                            </span>
+                                        </div>
+                                        <div class="d-atr-group mb-2">
+                                            <span class="d-atr">
+                                                <i class="fa fa-money-bill-wave text-primary"></i>
+                                                ${{ order.total_price }}
+                                            </span>
+                                        </div>
+                                        <span class="badge {% if order.status == 'confirmed' %}bg-success
+                                    {% elif order.status == 'pending' %}bg-warning
+                                    {% else %}bg-danger{% endif %}">
+                                            {{ order.status|title }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% else %}
+                            <div class="text-center text-muted">
+                                <p>No upcoming pickups found.</p>
+                            </div>
+                            {% endif %}
+                        </div>
+
+
+
+                        <!-- Recommended Services Section -->
+                        <h4 class="text-primary mt-5 mb-3">Recommended Services</h4>
+                        <div class="row">
+                            {% for service in recommended_services %}
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                                <div class="de-item mb30">
+                                    <div class="d-img" style="position: relative; overflow: hidden;">
+                                        {% if service.image %}
+                                        <img src="{{ service.image.url }}" class="img-fluid service-image"
+                                            alt="{{ service.name }}">
+                                        {% else %}
+                                        <img src="{% static 'images/services/default_service_image.jpg' %}"
+                                            class="img-fluid service-image" alt="Default Service Image">
+                                        {% endif %}
+                                    </div>
+                                    <div class="d-info">
+                                        <div class="d-text">
+                                            <h4 class="service-name">{{ service.name }}</h4>
+                                            <p class="vendor-name">
+                                                {% if service.user.vendor %}
+                                                {{ service.user.vendor.business_name }}
+                                                {% else %}
+                                                <span class="text-muted">N/A</span>
+                                                {% endif %}
+                                            </p>
+                                            <div class="d-atr-group">
+                                                <span class="d-atr">
+                                                    <i class="fas fa-clock"></i>
+                                                    {{ service.duration_minutes }} mins
+                                                </span>
+                                            </div>
+                                            <div class="d-price">
+                                                Service rate from <span>${{ service.price }}</span>
+                                                <a class="btn-main" href="{% url 'customer_booking' service.id %}">Book
+                                                    Now</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div class="col-12 text-center">
+                                <p>No recommended services available at the moment.</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- Content Close -->
+</div>
+{% include 'includes/footer.html' %}
+<!-- Javascript -->
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+
+<style>
+    .de-item {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        height: auto;
+        /* Allows the height to adjust dynamically */
+        display: flex;
+        flex-direction: column;
+        /* Ensures content is stacked */
+        justify-content: space-between;
+        /* Ensures consistent spacing */
+        padding: 10px;
+        /* Reduces internal padding */
+    }
+
+    .service-image {
+        width: 100%;
+        height: 120px;
+        /* Reduces the image height */
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .d-info {
+        padding: 10px;
+        /* Reduces padding inside the card */
+        text-align: left;
+    }
+
+    .d-info .service-name {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 6px;
+        /* Reduces spacing below the name */
+    }
+
+    .vendor-name {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 8px;
+        /* Reduces spacing */
+    }
+
+    .d-atr-group {
+        font-size: 13px;
+        /* Slightly smaller font size */
+        color: #666;
+        margin-bottom: 8px;
+        /* Reduces spacing */
+    }
+
+    .d-price {
+        font-size: 15px;
+        /* Adjusts font size for compact display */
+        color: #333;
+        margin-top: 8px;
+        text-align: left;
+    }
+
+    .btn-main {
+        background-color: #28a745;
+        color: #fff;
+        font-size: 14px;
+        padding: 6px 10px;
+        /* Reduces button padding */
+        border-radius: 4px;
+        display: inline-block;
+        margin-top: 8px;
+    }
+
+    .btn-main:hover {
+        background-color: #218838;
+    }
+    .compact-card {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .compact-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .compact-card h5 {
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .d-atr-group {
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+    }
+
+    .badge {
+        padding: 5px 10px;
+        font-size: 12px;
+        border-radius: 5px;
+        color: #fff;
+    }
+
+    .bg-success {
+        background-color: #28a745 !important;
+    }
+
+    .bg-warning {
+        background-color: #ffc107 !important;
+    }
+
+    .bg-danger {
+        background-color: #dc3545 !important;
+    }
+
+    .compact-card .d-info {
+        padding: 10px;
+    }
+</style>
+{% endblock %}

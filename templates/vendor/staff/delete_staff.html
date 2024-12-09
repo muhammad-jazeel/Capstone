@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div id="wrapper">
+    <!-- header begin -->
+    {% include 'includes/navbar.html' %}
+    <!-- header close -->
+    <!-- content begin -->
+    <div class="no-bottom no-top zebra" id="content">
+        <div id="top"></div>
+
+        <!-- section begin -->
+        <section id="subheader" class="jarallax text-light">
+            <img src="{% static 'images/background/14.jpg' %}" class="jarallax-img" alt="">
+            <div class="center-y relative text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h1>Delete Staff</h1>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- section close -->
+
+        <section id="section-delete-staff" class="bg-gray-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 mb30">
+                        {% include 'includes/sidebar.html' %}
+                    </div>
+                    <div class="col-lg-9">
+                        <div class="card p-4 rounded-5 text-center">
+                            <p>Are you sure you want to delete <strong>{{ staff.first_name }} {{ staff.last_name }}</strong>?</p>
+                            <form method="post" action="{% url 'delete_staff' staff.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-main">Confirm</button>
+                                <a href="{% url 'staffs' %}" class="btn-secondary">Cancel</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+{% endblock %}

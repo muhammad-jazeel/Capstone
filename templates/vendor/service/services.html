@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div id="wrapper">
+    {% include 'includes/navbar.html'%}
+    <div class="no-bottom no-top zebra" id="content">
+        <div id="top"></div>
+
+        <!-- section begin -->
+        <section id="subheader" class="jarallax text-light">
+            <img src="{% static 'images/background/14.jpg' %}" class="jarallax-img" alt="">
+            <div class="center-y relative text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h1>Services</h1>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- section close -->
+
+        <section id="section-cars" class="bg-gray-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 mb30">
+                        {% include 'includes/sidebar.html'%}
+                    </div>
+
+                    <div class="col-lg-9">
+                        <h3>All Services</h3>
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="search-bar" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px;">
+                            <form method="get" action="{% url 'services' %}" style="flex-grow: 1; display: flex; align-items: center; gap: 10px;">
+                                <!-- Search Input -->
+                                <input type="text" class="form-control" placeholder="Search Services" name="search" 
+                                       value="{{ request.GET.search }}" style="flex-grow: 1;">
+                        
+                                <!-- Status Filter Dropdown -->
+                                <select name="status" class="form-select" style="width: 150px;">
+                                    <option value="" {% if not status_filter %}selected{% endif %}>All</option>
+                                    <option value="active" {% if status_filter == "active" %}selected{% endif %}>Active</option>
+                                    <option value="inactive" {% if status_filter == "inactive" %}selected{% endif %}>Inactive</option>
+                                </select>
+                        
+                                <!-- Submit Button -->
+                                <button type="submit" class="btn-main" style="padding: 5px 16px; margin-left: 10px;">Search</button>
+                            </form>
+                            <a href="{% url 'add_services_view' %}" class="btn-main" style="white-space: nowrap; color: #fff; margin-left: 10px;">Add Services</a>
+                        </div>
+                        
+
+                        <div class="card p-4 rounded-5">
+                            <div class="spacer-10"></div>
+                            <div class="row">
+                                {% for service in services %}
+                                    <div class="de-item-list no-border mb30">
+                                        <div class="d-img">
+                                            <!-- Display the service image -->
+                                            {% if service.image %}
+                                                <img src="{{ service.image.url }}" class="img-fluid" alt="{{ service.name }}">
+                                            {% else %}
+                                                <img src="{% static 'images/services/service_placeholder.jpg' %}" class="img-fluid" alt="Placeholder">
+                                            {% endif %}
+                                        </div>
+                                        <div class="d-info">
+                                            <div class="d-text">
+                                                <h4>{{ service.name }}</h4>
+                                                <div class="d-atr-group">
+                                                    <ul class="d-atr">
+                                                        <li><span>Price:</span> ${{ service.price }}</li>
+                                                        <li><span>Status:</span> {{ service.get_status_display }}</li>
+                                                        <li><span>Staff Assigned:</span> 
+                                                            {% with service.staffserviceassignment_set.all as assignments %}
+                                                                {% for assignment in assignments %}
+                                                                    {{ assignment.staff.first_name }} {{ assignment.staff.last_name }}
+                                                                    {% if not forloop.last %}, {% endif %}
+                                                                {% empty %}
+                                                                    No staff assigned.
+                                                                {% endfor %}
+                                                            {% endwith %}
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-price">
+                                            <a class="btn-main" href="{% url 'edit_service_view' service.id %}">Edit</a>
+                                            <form method="post" action="{% url 'delete_service_view' service.id %}" style="display: inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn-main btn-delete">Delete</button>
+                                            </form>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                {% empty %}
+                                    <div class="col-12 text-center">
+                                        <p>No services found. <a href="{% url 'add_services_view' %}">Add a new service</a>.</p>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% load static %}
+<div class="card p-4 rounded-5">
+    <div class="profile_avatar text-center mb-3">
+        <div class="profile_image" style="margin-bottom: 15px;">
+            {% if user.profile_image %}
+            <img src="{{ user.profile_image.url }}" alt="User Account" class="rounded-circle"
+                style="width: 100px; height: 100px; object-fit: cover; border: 3px solid #f4f4f4;">
+            {% else %}
+            <img src="{% static 'images/default-avatar.jpg' %}" alt="Default Avatar" class="rounded-circle"
+                style="width: 100px; height: 100px; object-fit: cover; border: 3px solid #f4f4f4;">
+            {% endif %}
+        </div>
+        <div class="profile_name">
+            <h4>
+                {{ user.first_name }} {{ user.last_name }}
+                <span class="profile_username text-gray">{{ user.email }}</span> <!-- Display user's email -->
+            </h4>
+        </div>
+    </div>
+
+    <div class="spacer-20"></div>
+    <ul class="menu-col">
+        <li><a href="{% url 'customer_dashboard' %}" class="{% if request.resolver_match.url_name == 'customer_dashboard' %}active{% endif %}"><i class="fa fa-home"></i>Dashboard</a></li>
+        <li><a href="{% url 'customer_profile_view' %}" class="{% if request.resolver_match.url_name == 'customer_profile_view' %}active{% endif %}"><i class="fa fa-user"></i>Profile</a></li>
+        <li><a href="{% url 'customer_bookings' %}" class="{% if request.resolver_match.url_name == 'customer_bookings' %}active{% endif %}"><i class="fa fa-calendar"></i>Bookings</a></li>
+        <li><a href="{% url 'customer_orders' %}" class="{% if request.resolver_match.url_name == 'customer_orders' %}active{% endif %}"><i class="fa fa-calendar"></i>Orders</a></li>
+        <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i>Sign Out</a></li>
+    </ul>
+    
+</div>

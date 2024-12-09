@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div id="wrapper">
+    {% include 'includes/navbar.html' %}
+    <div class="no-bottom no-top zebra" id="content">
+        <div id="top"></div>
+
+        <!-- Section for header -->
+        <section id="subheader" class="jarallax text-light">
+            <img src="{% static 'images/background/14.jpg' %}" class="jarallax-img" alt="">
+            <div class="center-y relative text-center">
+                <div class="container">
+                    <h1>Staff Management</h1>
+                </div>
+            </div>
+        </section>
+
+        <!-- Staffs Section -->
+        <section id="section-staffs" class="bg-gray-100 py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 mb-4">
+                        {% include 'includes/sidebar.html' %}
+                    </div>
+                    <div class="col-lg-9">
+                        <!-- Success Messages -->
+                        {% if messages %}
+                            <div class="mb-4">
+                                {% for message in messages %}
+                                    {% if "success" in message.tags %}
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                            {{ message }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <div class="d-flex flex-column mb-4">
+                            <!-- Heading -->
+                            <h3 class="mb-3">Staffs</h3>
+                        
+                            <!-- Search and Filter Section -->
+                            <div class="d-flex justify-content-between align-items-center">
+                                <!-- Search Form -->
+                                <form method="get" action="{% url 'staffs' %}" class="d-flex align-items-center w-100" style="gap: 10px;">
+                                    <!-- Search Input -->
+                                    <div class="flex-grow-1">
+                                        <input type="text" class="form-control" placeholder="Search Staff" name="search" 
+                                               value="{{ search_query }}">
+                                    </div>
+                        
+                                    <!-- Department Dropdown -->
+                                    <div style="width: 250px;">
+                                        <select name="department" class="form-select">
+                                            <option value="">All Departments</option>
+                                            {% for department in departments %}
+                                                <option value="{{ department.id }}" 
+                                                    {% if department.id|stringformat:"s" == selected_department %}selected{% endif %}>
+                                                    {{ department.name }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                        
+                                    <!-- Submit Button -->
+                                    <div>
+                                        <button type="submit" class="btn-main" style="padding: 5px 16px;">Search</button>
+                                    </div>
+                                </form>
+                        
+                                <!-- Add Staff Button -->
+                                <a href="{% url 'add_staff' %}" class="btn-main" style="white-space: nowrap; color: #fff; margin-left: 10px;">Add Staff</a>
+                            </div>
+                        </div>
+
+                        <!-- Staff Cards -->
+                        <div class="row">
+                            {% for staff in staffs %}
+                                <div class="col-md-6 col-lg-4 mb-4">
+                                    <div class="card shadow-sm border-0">
+                                        <div class="card-header bg-primary text-white text-center">
+                                            {% if staff.image %}
+                                                <img src="{{ staff.image.url }}" alt="Staff Image" class="rounded-circle border border-light mb-2" style="width: 100px; height: 100px;">
+                                            {% else %}
+                                                <img src="{% static 'images/staff_placeholder.jpg' %}" alt="Default Image" class="rounded-circle border border-light mb-2" style="width: 100px; height: 100px;">
+                                            {% endif %}
+                                            <h5 class="card-title mb-0">{{ staff.first_name }} {{ staff.last_name }}</h5>
+                                            <small class="text-light">{{ staff.email }}</small>
+                                        </div>
+                                        <div class="card-body text-center">
+                                            <p class="mb-1"><strong>Phone:</strong> {{ staff.phone_number }}</p>
+                                            <p>
+                                                <strong>Departments:</strong>
+                                                {% for department in staff.departments.all %}
+                                                    <span class="badge bg-secondary">{{ department.name }}</span>
+                                                {% endfor %}
+                                            </p>
+                                            <div class="d-flex justify-content-center">
+                                                <a href="{% url 'edit_staff' staff.id %}" class="btn btn-sm btn-outline-primary me-2">Edit</a>
+                                                <a href="{% url 'delete_staff' staff.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% empty %}
+                                <div class="col-12 text-center">
+                                    <p>No staff members found. <a href="{% url 'add_staff' %}">Add a new staff member</a>.</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+{% endblock %}

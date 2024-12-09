@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div id="wrapper">
+    <!-- Header Begin -->
+    <header class="transparent scroll-light has-topbar">
+        <div id="topbar" class="topbar-dark text-light"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="de-flex sm-pt10">
+                        <div class="de-flex-col">
+                            <div id="logo">
+                                <a href="{% static 'index.html' %}">
+                                    <img class="logo-1" src="{% static 'images/logo-AUTOASSIST-light.png' %}" alt="logo"
+                                        style="height: 100px; width: 100px;">
+                                    <img class="logo-2" src="{% static 'images/logo-AUTOASSIST.png' %}" alt="logo"
+                                        style="height: 100px; width: 100px;">
+                                </a>
+                            </div>
+                        </div>
+                        {% include 'includes/customer_navbar.html' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Header Close -->
+
+    <!-- Content Begin -->
+    <div class="no-bottom no-top" id="content">
+        <div id="top"></div>
+
+        <!-- Subheader Section -->
+        <section id="subheader" class="jarallax text-light">
+            <img src="{% static 'images/background/16.jpg' %}" class="jarallax-img" alt="">
+            <div class="center-y relative text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h1>Quick Booking</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Booking Form Section -->
+        <section id="section-hero" aria-label="section" class="no-top" style="background-color: #121212; padding: 30px 0;">
+            <div class="container py-4">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="p-4 rounded-3 shadow-soft" style="background-color: #ffffff;">
+                            {% if messages %}
+                            <div class="alert alert-danger">
+                                {% for message in messages %}
+                                <p>{{ message }}</p>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+        
+                            {% if user.is_authenticated %}
+                            <form id="contact_form" method="post" action="{% url 'customer_booking' service.id %}">
+                                {% csrf_token %}
+                                <div id="step-1" class="row g-4">
+                                    <div class="col-lg-6">
+                                        <h5>Selected Service Type</h5>
+                                        <input type="text" name="Service_Type" value="{{ service.name }}" class="form-control" readonly>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <h5>Car Registration Number</h5>
+                                        <input type="text" name="Car_Registration" placeholder="Enter your car's registration number"
+                                            id="car_registration" class="form-control">
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label for="date-picker">Preferred Service Date</label>
+                                        <input type="text" id="date-picker-service" name="Service_Date" class="form-control custom-date-picker"
+                                            placeholder="Select a date">
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <h5>Preferred Time Slot</h5>
+                                        <select name="Service_Time" id="service-time" class="form-control">
+                                            <option selected disabled>Select Time</option>
+                                            {% for time_slot in time_slots %}
+                                            <option value="{{ time_slot.id }}">{{ time_slot.time }}</option>
+                                            {% empty %}
+                                            <option disabled>No available time slots</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+        
+                                    <div class="col-lg-12">
+                                        <h5>Additional Comments (Optional)</h5>
+                                        <textarea name="Additional_Comments" id="additional_comments" class="form-control"></textarea>
+                                    </div>
+                                    <div class="col-lg-12 text-center">
+                                        <input type="submit" value="Book Service" class="btn-main">
+                                    </div>
+                                </div>
+                            </form>
+                            {% else %}
+                            <div class="alert alert-warning text-center">
+                                You need to log in to make a booking. <a href="{% url 'login' %}">Log In</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+
+
+        <!-- Steps Section -->
+        <section id="steps-section" class="mt-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3 wow fadeInRight" data-wow-delay=".2s">
+                        <div class="feature-box style-4 text-center">
+                            <a href="#"><i class="bg-color text-light i-boxed fa fa-car"></i></a>
+                            <div class="text">
+                                <a href="#">
+                                    <h4>Select your vehicle</h4>
+                                </a>
+                                Ensure your vehicle gets the attention it deserves by choosing the make and model that
+                                needs service from our comprehensive list.
+                            </div>
+                            <span class="wm">1</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 wow fadeInRight" data-wow-delay=".4s">
+                        <div class="feature-box style-4 text-center">
+                            <a href="#"><i class="bg-color text-light i-boxed fa fa-wrench"></i></a>
+                            <div class="text">
+                                <a href="#">
+                                    <h4>Choose a service</h4>
+                                </a>
+                                Select from a range of maintenance services including oil changes, brake checks, tire
+                                rotations, and more to keep your car running smoothly.
+                            </div>
+                            <span class="wm">2</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 wow fadeInRight" data-wow-delay=".6s">
+                        <div class="feature-box style-4 text-center">
+                            <a href="#"><i class="bg-color text-light i-boxed fa fa-calendar"></i></a>
+                            <div class="text">
+                                <a href="#">
+                                    <h4>Pick date & time</h4>
+                                </a>
+                                Schedule your preferred service date and time, making sure your vehicle gets the care it
+                                needs at a time that works for you.
+                            </div>
+                            <span class="wm">3</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 wow fadeInRight" data-wow-delay=".6s">
+                        <div class="feature-box style-4 text-center">
+                            <a href="#"><i class="bg-color text-light i-boxed fa fa-smile-o"></i></a>
+                            <div class="text">
+                                <a href="#">
+                                    <h4>Sit back & relax</h4>
+                                </a>
+                                Enjoy a hassle-free experience as our expert technicians take care of your vehicle,
+                                giving you peace of mind and convenience.
+                            </div>
+                            <span class="wm">4</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- Content Close -->
+
+    {% include 'includes/footer.html' %}
+</div>
+
+<!-- Javascript Files -->
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    flatpickr(".custom-date-picker", {
+        dateFormat: "Y-m-d", // Ensures compatibility with Django's DateField
+        minDate: "today", // Prevent selecting past dates
+    });
+});
+</script>
+
+<style>
+    .custom-date-picker {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 14px;
+    color: #333;
+}
+
+</style>
+{% endblock %}

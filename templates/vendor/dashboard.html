@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div id="wrapper">
+    {% include 'includes/navbar.html' %}
+    <div class="no-bottom no-top zebra" id="content">
+        <div id="top"></div>
+
+        <!-- Section for header -->
+        <section id="subheader" class="jarallax text-light">
+            <img src="{% static 'images/background/14.jpg' %}" class="jarallax-img" alt="">
+            <div class="center-y relative text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h1>Dashboard</h1>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Section close -->
+
+        <section id="section-cars" class="bg-gray-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 mb30">
+                        {% include 'includes/sidebar.html' %}
+                    </div>
+
+                    <div class="col-lg-9">
+                        <div class="row">
+                            <!-- Total Services -->
+                            <div class="col-lg-3 col-6 mb25 order-sm-1">
+                                <div class="card p-4 rounded-5">
+                                    <div class="symbol mb40">
+                                        <i class="fa-solid id-color fa-2x fa-wrench"></i>
+                                    </div>
+                                    <span class="h1 mb0">{{ total_services }}</span>
+                                    <span class="text-gray">Total Services</span>
+                                </div>
+                            </div>
+
+                            <!-- Total Staff -->
+                            <div class="col-lg-3 col-6 mb25 order-sm-1">
+                                <div class="card p-4 rounded-5">
+                                    <div class="symbol mb40">
+                                        <i class="fa-solid id-color fa-2x fa-users-gear"></i>
+                                    </div>
+                                    <span class="h1 mb0">{{ total_staff }}</span>
+                                    <span class="text-gray">Staffs</span>
+                                </div>
+                            </div>
+
+                            <!-- Dummy Data: Active Services -->
+                            <div class="col-lg-3 col-6 mb25 order-sm-1">
+                                <div class="card p-4 rounded-5">
+                                    <div class="symbol mb40">
+                                        <i class="fa id-color fa-2x fa-calendar-check-o"></i>
+                                    </div>
+                                    <span class="h1 mb0">{{ active_departments }}</span>
+                                    <span class="text-gray">Active Departments</span>
+                                </div>
+                            </div>
+
+                            <!-- Dummy Data: Cancel Orders -->
+                            <div class="col-lg-3 col-6 mb25 order-sm-1">
+                                <div class="card p-4 rounded-5">
+                                    <div class="symbol mb40">
+                                        <i class="fa id-color fa-2x fa-calendar-times-o"></i>
+                                    </div>
+                                    <span class="h1 mb0">{{ total_bookings }}</span>
+                                    <span class="text-gray">Bookings</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card p-4 rounded-5 mb25">
+                            <h4>Bookings for {{ today }}</h4> <!-- Display today's date -->
+                            <table class="table de-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Booking ID</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Customer</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Service</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Time Slot</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Car Registration</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Total Price</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Status</span></th>
+                                        <!-- <th scope="col"><span class="text-uppercase fs-12 text-gray">Actions</span></th> -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if vendor_reservations %}
+                                        {% for booking in vendor_reservations %}
+                                        <tr>
+                                            <td>
+                                                <div class="badge bg-gray-100 text-dark">#{{ booking.id }}</div>
+                                            </td>
+                                            <td>{{ booking.customer.first_name }} {{ booking.customer.last_name }}</td>
+                                            <td>{{ booking.service.name }}</td>
+                                            <td>{{ booking.time_slot.time }}</td>
+                                            <td>{{ booking.car_registration }}</td>
+                                            <td>${{ booking.total_price }}</td>
+                                            <td>
+                                                <div class="badge 
+                                                    {% if booking.status == 'confirmed' %} bg-success
+                                                    {% elif booking.status == 'pending' %} bg-warning
+                                                    {% elif booking.status == 'completed' %} bg-primary
+                                                    {% else %} bg-danger {% endif %}">
+                                                    {{ booking.status|title }}
+                                                </div>
+                                            </td>
+                                            <!-- <td>
+                                                {% if booking.status != 'completed' %}
+                                                    <a href="{% url 'update_reservation_status' booking.id %}" class="btn btn-sm btn-primary">
+                                                        Mark as Completed
+                                                    </a>
+                                                {% else %}
+                                                    <span class="text-muted">Completed</span>
+                                                {% endif %}
+                                            </td> -->
+                                        </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="8" class="text-center text-muted">No bookings found for today.</td>
+                                        </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+
+                        <div class="card p-4 rounded-5 mb25">
+                            <h4>Pickups for {{ today }}</h4>
+                            <table class="table de-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Order ID</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Customer</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Product</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Quantity</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Total Price</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Pickup Time</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Status</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if todays_pickups %}
+                                        {% for pickup in todays_pickups %}
+                                        <tr>
+                                            <td>
+                                                <div class="badge bg-gray-100 text-dark">#{{ pickup.id }}</div>
+                                            </td>
+                                            <td>{{ pickup.customer.first_name }} {{ pickup.customer.last_name }}</td>
+                                            <td>{{ pickup.product.name }}</td>
+                                            <td>{{ pickup.quantity }}</td>
+                                            <td>${{ pickup.total_price }}</td>
+                                            <td>{{ pickup.pickup_time }}</td>
+                                            <td>
+                                                <div class="badge 
+                                                    {% if pickup.status == 'confirmed' %} bg-success
+                                                    {% elif pickup.status == 'picked_up' %} bg-primary
+                                                    {% else %} bg-danger {% endif %}">
+                                                    {{ pickup.status|title }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="7" class="text-center text-muted">No pickups scheduled for today.</td>
+                                        </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+{% endblock %}

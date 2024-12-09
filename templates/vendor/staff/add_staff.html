@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div id="wrapper">
+    {% include 'includes/navbar.html' %}
+    <div class="no-bottom no-top zebra" id="content">
+        <div id="top"></div>
+
+        <!-- Section for header -->
+        <section id="subheader" class="jarallax text-light">
+            <img src="{% static 'images/background/14.jpg' %}" class="jarallax-img" alt="">
+            <div class="center-y relative text-center">
+                <div class="container">
+                    <h1>Add Staff</h1>
+                </div>
+            </div>
+        </section>
+
+        <!-- Add Staff Form -->
+        <section id="section-add-staff" class="bg-gray-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 mb30">
+                        {% include 'includes/sidebar.html' %}
+                    </div>
+                    <div class="col-lg-9">
+                        <div class="card p-4 rounded-5">
+                            <!-- Display Error Messages -->
+                            {% if messages %}
+                                <div class="mb-4">
+                                    {% for message in messages %}
+                                        {% if "error" in message.tags %}
+                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                {{ message }}
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                            <form method="post" action="{% url 'add_staff' %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="first_name">First Name</label>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter First Name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="last_name">Last Name</label>
+                                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter Last Name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone_number">Phone Number</label>
+                                    <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Enter Phone Number" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="departments">Departments</label>
+                                    <select class="form-control" id="departments" name="departments">
+                                        <option value="" disabled selected>Select Department</option>
+                                        {% for department in departments %}
+                                            <option value="{{ department.id }}">{{ department.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <!-- Selected Departments -->
+                                <div class="selected-departments mt-3">
+                                    <label>Selected Departments:</label>
+                                    <div id="selected-departments-container" class="d-flex flex-wrap"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="image">Upload Image</label>
+                                    <input type="file" class="form-control" id="image" name="image">
+                                </div>
+
+                                <div class="text-center mt-4">
+                                    <button type="submit" class="btn-main">Add Staff</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script>
+    const departmentDropdown = document.getElementById('departments');
+    const selectedContainer = document.getElementById('selected-departments-container');
+
+    departmentDropdown.addEventListener('change', () => {
+        const selectedOption = departmentDropdown.options[departmentDropdown.selectedIndex];
+        const departmentId = selectedOption.value;
+        const departmentName = selectedOption.text;
+
+        if (document.getElementById(`selected-department-${departmentId}`)) {
+            return;
+        }
+
+        const selectedElement = document.createElement('div');
+        selectedElement.classList.add('selected-department', 'badge', 'bg-primary', 'text-white', 'me-2', 'mb-2');
+        selectedElement.id = `selected-department-${departmentId}`;
+        selectedElement.innerHTML = `
+            ${departmentName} 
+            <button type="button" class="btn-close btn-close-white ms-2" aria-label="Remove"></button>
+            <input type="hidden" name="departments" value="${departmentId}">
+        `;
+
+        selectedElement.querySelector('.btn-close').addEventListener('click', () => {
+            selectedElement.remove();
+        });
+
+        selectedContainer.appendChild(selectedElement);
+    });
+</script>
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+{% endblock %}

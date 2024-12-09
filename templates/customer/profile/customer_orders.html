@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div id="wrapper">
+    <!-- Header Begin -->
+    <header class="transparent scroll-light has-topbar">
+        <div id="topbar" class="topbar-dark text-light"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="de-flex sm-pt10">
+                        <div class="de-flex-col">
+                            <div id="logo">
+                                <a href="{% static 'index.html' %}">
+                                    <img class="logo-1" src="{% static 'images/logo-AUTOASSIST-light.png' %}" alt="logo"
+                                        style="height: 100px; width: 100px;">
+                                    <img class="logo-2" src="{% static 'images/logo-AUTOASSIST.png' %}" alt="logo"
+                                        style="height: 100px; width: 100px;">
+                                </a>
+                            </div>
+                        </div>
+                        {% include 'includes/customer_navbar.html' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Header Close -->
+
+    <!-- Content Begin -->
+    <div class="no-bottom no-top zebra" id="content">
+        <div id="top"></div>
+
+        <!-- Subheader Section -->
+        <section id="subheader" class="jarallax text-light">
+            <img src="{% static 'images/background/14.jpg' %}" class="jarallax-img" alt="">
+            <div class="center-y relative text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h1>My Orders</h1>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Subheader Section Close -->
+
+        <section id="section-orders" class="bg-gray-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 mb30">
+                        {% include 'includes/customer_sidenavbar.html' %}
+                    </div>
+
+                    <div class="col-lg-9">
+                        <div class="card p-4 rounded-5 shadow-lg">
+                            <h4 class="mb-4 text-primary">My Orders</h4>
+
+                            <!-- Search and Filter Section -->
+                            <form method="get" action="" class="mb-4">
+                                <div class="row g-3 align-items-center">
+                                    <div class="col-md-4">
+                                        <input type="text" name="search" class="form-control"
+                                            placeholder="Search by product or vendor" value="{{ search_query }}">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="date" name="date" class="form-control" value="{{ date_filter }}">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="submit" class="btn-main w-100">Apply Filters</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <!-- Orders Table -->
+                            <table class="table de-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Order ID</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Product Name</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Vendor</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Pickup Date</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Pickup Time</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Quantity</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Status</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in orders %}
+                                    <tr>
+                                        <td><div class="badge bg-gray-100 text-dark">#{{ order.id }}</div></td>
+                                        <td><span class="bold">{{ order.product.name }}</span></td>
+                                        <td>{{ order.vendor.business_name }}</td>
+                                        <td>{{ order.pickup_date }}</td>
+                                        <td>{{ order.pickup_time }}</td>
+                                        <td>{{ order.quantity }}</td>
+                                        <td>
+                                            <div class="badge rounded-pill 
+                                                {% if order.status == 'confirmed' %} bg-success
+                                                {% elif order.status == 'pending' %} bg-warning
+                                                {% else %} bg-danger {% endif %}">
+                                                {{ order.status|title }}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="7" class="text-center text-muted">No orders found.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- Content Close -->
+
+    <a href="#" id="back-to-top"></a>
+</div>
+
+{% include 'includes/footer.html' %}
+
+<!-- Javascript Files -->
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+<style>
+.table {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.table th,
+.table td {
+    vertical-align: middle;
+    text-align: center;
+    padding: 12px 8px;
+    font-size: 14px;
+}
+
+.table thead th {
+    background-color: #f8f9fa; /* Light grey header background */
+    color: #333; /* Darker text for better readability */
+    font-weight: bold;
+    font-size: 16px;
+    text-transform: uppercase;
+    border-bottom: 2px solid #dee2e6; /* Slightly darker border for separation */
+}
+
+.table tbody tr:hover {
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+/* Badge Styling */
+.badge {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 5px;
+    color: #fff;
+}
+
+.bg-success {
+    background-color: #28a745 !important;
+}
+
+.bg-warning {
+    background-color: #ffc107 !important;
+}
+
+.bg-danger {
+    background-color: #dc3545 !important;
+}
+
+.bg-gray-100 {
+    background-color: #f1f1f1 !important;
+    color: #333 !important;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.text-muted {
+    color: #6c757d !important;
+}
+
+.text-gray {
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.text-uppercase {
+    text-transform: uppercase;
+}
+
+.fs-12 {
+    font-size: 12px;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div id="wrapper">
+    {% include 'includes/navbar.html' %}
+    <div class="no-bottom no-top zebra" id="content">
+        <div id="top"></div>
+        <section id="subheader" class="jarallax text-light">
+            <img src="{% static 'images/background/14.jpg' %}" class="jarallax-img" alt="">
+            <div class="center-y relative text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h1>Categories</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-categories" class="bg-gray-100 py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3">
+                        {% include 'includes/sidebar.html' %}
+                    </div>
+                    <div class="col-lg-9">
+                        <!-- Success Messages -->
+                        {% if messages %}
+                            <div class="mb-4">
+                                {% for message in messages %}
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <!-- Heading and Search Section -->
+                        <div class="d-flex flex-column mb-4">
+                            <h3 class="mb-3">All Categories</h3>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <!-- Search Form -->
+                                <form method="get" action="{% url 'list_categories' %}" class="d-flex align-items-center w-100" style="gap: 10px;">
+                                    <!-- Search Input -->
+                                    <div class="flex-grow-1">
+                                        <input type="text" class="form-control" placeholder="Search Categories" name="search" 
+                                               value="{{ search_query }}">
+                                    </div>
+
+                                    <!-- Status Dropdown -->
+                                    <div style="width: 200px;">
+                                        <select name="status" class="form-select">
+                                            <option value="">All Statuses</option>
+                                            <option value="active" {% if status_filter == "active" %}selected{% endif %}>Active</option>
+                                            <option value="inactive" {% if status_filter == "inactive" %}selected{% endif %}>Inactive</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Submit Button -->
+                                    <div>
+                                        <button type="submit" class="btn-main" style="padding: 5px 16px;">Search</button>
+                                    </div>
+                                </form>
+                                <!-- Add Category Button -->
+                                <a href="{% url 'add_category' %}" class="btn-main" style="white-space: nowrap; color: #fff; margin-left: 10px;">Add Category</a>
+                            </div>
+                        </div>
+
+                        <!-- Categories Cards Section -->
+                        <div class="row">
+                            {% for category in categories %}
+                                <div class="col-md-4 mb30">
+                                    <div class="card p-4 rounded-5 shadow-sm border-0">
+                                        <h4>{{ category.name }}</h4>
+                                        <p>Status: <strong>{{ category.get_status_display }}</strong></p>
+                                        <p>Created At: {{ category.created_at|date:"M d, Y" }}</p>
+                                        <div class="d-flex justify-content-between gap-2 mt-3">
+                                            <a href="{% url 'edit_category' category.id %}" class="btn-main w-50 text-center">Edit</a>
+                                            <a href="{% url 'toggle_category_status' category.id %}" class="btn-main w-50 text-center">
+                                                {% if category.status == 'active' %} Deactivate {% else %} Activate {% endif %}
+                                            </a>
+                                        </div>
+                                        <div class="d-flex justify-content-center mt-3">
+                                            <a href="{% url 'delete_category' category.id %}" class="btn-main btn-delete">Delete</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% empty %}
+                                <div class="col-12 text-center">
+                                    <p>No categories found. <a href="{% url 'add_category' %}">Add a new category</a>.</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div id="wrapper">
+    {% include 'includes/navbar.html' %}
+    <div class="no-bottom no-top zebra" id="content">
+        <div id="top"></div>
+
+        <!-- section begin -->
+        <section id="subheader" class="jarallax text-light">
+            <img src="{% static 'images/background/14.jpg' %}" class="jarallax-img" alt="">
+            <div class="center-y relative text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h1>Edit Service</h1>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- section close -->
+
+        <section id="section-cars" class="bg-gray-100">
+            <div class="container">
+                <div class="row">
+                    <!-- Sidebar -->
+                    <div class="col-lg-3 mb30">
+                        {% include 'includes/sidebar.html' %}
+                    </div>
+
+                    <!-- Edit Service Form -->
+                    <div class="col-lg-9">
+                        <h3 style="text-align: center;">Edit Service</h3>
+                        <div class="card p-4 rounded-5 mb25" style="justify-content: center;">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                                {% endfor %}
+                            {% endif %}
+
+                            <form method="post" action="{% url 'edit_service_view' service.id %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+
+                                <!-- Service Name -->
+                                <div class="mb-3">
+                                    <label for="serviceName" class="form-label">Service Name</label>
+                                    <input type="text" class="form-control" id="serviceName" name="name" value="{{ service.name }}" required>
+                                </div>
+
+                                <!-- Price -->
+                                <div class="mb-3">
+                                    <label for="servicePrice" class="form-label">Price</label>
+                                    <input type="number" class="form-control" id="servicePrice" name="price" value="{{ service.price }}" required>
+                                </div>
+
+                                <!-- Duration -->
+                                <div class="mb-3">
+                                    <label for="serviceDuration" class="form-label">Duration (Minutes)</label>
+                                    <input type="number" class="form-control" id="serviceDuration" name="duration_minutes" value="{{ service.duration_minutes }}" required>
+                                </div>
+
+                                <!-- Description -->
+                                <div class="mb-3">
+                                    <label for="serviceDescription" class="form-label">Description</label>
+                                    <textarea class="form-control" id="serviceDescription" name="description" rows="3" required>{{ service.description }}</textarea>
+                                </div>
+
+                                <!-- Start Time -->
+                                <div class="mb-3">
+                                    <label for="startTime" class="form-label">Start Time</label>
+                                    <input type="time" class="form-control" id="startTime" name="start_time" value="{{ service.start_time|time:'H:i' }}" required>
+                                </div>
+
+                                <!-- End Time -->
+                                <div class="mb-3">
+                                    <label for="endTime" class="form-label">End Time</label>
+                                    <input type="time" class="form-control" id="endTime" name="end_time" value="{{ service.end_time|time:'H:i' }}" required>
+                                </div>
+
+                                <!-- Current Image -->
+                                <div class="mb-3">
+                                    <label for="currentImage" class="form-label">Current Image</label>
+                                    {% if service.image %}
+                                        <img src="{{ service.image.url }}" class="img-fluid mb-3" alt="{{ service.name }}" style="max-height: 200px;">
+                                    {% else %}
+                                        <p>No image uploaded.</p>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Upload New Image -->
+                                <div class="mb-3">
+                                    <label for="newImage" class="form-label">Upload New Image</label>
+                                    <input type="file" class="form-control" id="newImage" name="image">
+                                    <small class="text-muted">Leave blank if you do not want to change the image.</small>
+                                </div>
+
+                                <!-- Staff Selection -->
+                                <div class="mb-3">
+                                    <label for="staffAssigned" class="form-label">Staff Assigned</label>
+                                    <select class="form-control" id="staffAssigned" name="staffs" multiple>
+                                        {% for staff in staffs %}
+                                            <option value="{{ staff.id }}" {% if staff.id in assigned_staff_ids %}selected{% endif %}>
+                                                {{ staff.first_name }} {{ staff.last_name }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <!-- Status Selection -->
+                                <div class="mb-3">
+                                    <label for="serviceStatus" class="form-label">Status</label>
+                                    <select class="form-control" id="serviceStatus" name="status">
+                                        <option value="active" {% if service.status == "active" %}selected{% endif %}>Active</option>
+                                        <option value="inactive" {% if service.status == "inactive" %}selected{% endif %}>Inactive</option>
+                                    </select>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <a href="{% url 'services' %}" class="btn-main" style="background-color: #000; color: #fff;">Back</a>
+                                    <button type="submit" class="btn-main">Update Service</button>
+                                </div>
+                            </form>
+
+                            <!-- Time Slots -->
+                            <div class="mt-5">
+                                <h4>Manage Time Slots</h4>
+                                <div id="time-slots-container" class="d-flex flex-wrap">
+                                    {% for slot in slots %}
+                                        <div class="selected-slot badge bg-primary text-white me-2 mb-2" data-slot-id="{{ slot.id }}">
+                                            {{ slot.time }}
+                                            <button type="button" class="btn-close btn-close-white ms-2 remove-slot" aria-label="Remove"></button>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <button id="update-slots-btn" class="btn btn-primary mt-3">Update Time Slots</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script>
+    let removedSlotIds = []; // Track slot IDs
+
+document.querySelectorAll('.remove-slot').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+        const slotDiv = btn.parentElement;
+        const slotId = slotDiv.getAttribute('data-slot-id'); // Get slot ID
+        removedSlotIds.push(slotId); // Add to removed slots list
+        slotDiv.remove(); // Remove slot visually
+    });
+});
+
+document.getElementById('update-slots-btn').addEventListener('click', function () {
+    const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+    fetch("{% url 'update_time_slots' service.id %}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': csrfToken,
+        },
+        body: new URLSearchParams({ removed_slots: removedSlotIds })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert(data.message);
+            location.reload();
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error updating slots:', error);
+        alert('An error occurred while updating slots.');
+    });
+});
+
+</script>
+
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+{% endblock %}

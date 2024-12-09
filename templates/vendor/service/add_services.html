@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div id="wrapper">
+
+    <!-- header begin -->
+    {% include 'includes/navbar.html'%}
+    <!-- header close -->
+    <!-- content begin -->
+    <div class="no-bottom no-top zebra" id="content">
+        <div id="top"></div>
+
+        <!-- section begin -->
+        <section id="subheader" class="jarallax text-light">
+            <img src="{% static 'images/background/14.jpg' %}" class="jarallax-img" alt="">
+            <div class="center-y relative text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h1>Services</h1>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- section close -->
+
+        <section id="section-cars" class="bg-gray-100">
+            <div class="container">
+                <div class="row">
+                    <!-- Vendor Form -->
+                    <div class="col-lg-3 mb30">
+                        {% include 'includes/sidebar.html'%}
+                    </div>
+
+                    <div class="col-lg-9">
+                        <h3 style="text-align: center;">Add Services</h3>
+
+                        <div class="card p-4 rounded-5 mb25" style="justify-content: center;">
+                            <form method="post" enctype="multipart/form-data" action="{% url 'add_services_view' %}">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="serviceName" class="form-label text-uppercase fs-12 text-gray">Service
+                                        Name</label>
+                                    <input type="text" class="form-control" id="serviceName" name="serviceName"
+                                        placeholder="Enter service name" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="servicePrice"
+                                        class="form-label text-uppercase fs-12 text-gray">Price</label>
+                                    <input type="number" class="form-control" id="servicePrice" name="servicePrice"
+                                        placeholder="Enter price" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="serviceDuration"
+                                        class="form-label text-uppercase fs-12 text-gray">Duration (Minutes)</label>
+                                    <input type="number" class="form-control" id="serviceDuration"
+                                        name="serviceDuration" placeholder="Enter duration" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="startTime" class="form-label text-uppercase fs-12 text-gray">Start
+                                        Time</label>
+                                    <input type="time" class="form-control" id="startTime" name="startTime" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="endTime" class="form-label text-uppercase fs-12 text-gray">End
+                                        Time</label>
+                                    <input type="time" class="form-control" id="endTime" name="endTime" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="serviceDescription"
+                                        class="form-label text-uppercase fs-12 text-gray">Description</label>
+                                    <textarea class="form-control" id="serviceDescription" name="serviceDescription"
+                                        rows="3" placeholder="Enter service description" required></textarea>
+                                </div>
+
+                                <!-- <div class="mb-3">
+                                        <label for="serviceImage" class="form-label text-uppercase fs-12 text-gray">Image</label>
+                                        <input type="file" class="form-control" id="serviceImage" name="serviceImage">
+                                    </div> -->
+
+                                <!-- Dropdown for Staff Selection -->
+                                <div class="mb-3">
+                                    <label for="staffAssigned" class="form-label text-uppercase fs-12 text-gray">Assign
+                                        Staffs</label>
+                                    <select class="form-control" id="staffAssigned" name="staffs" multiple>
+                                        {% for staff in staffs %}
+                                        <option value="{{ staff.id }}">{{ staff.first_name }} {{ staff.last_name }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <!-- Display Selected Staff -->
+                                <div class="mb-3">
+                                    <label class="form-label text-uppercase fs-12 text-gray">Selected Staffs:</label>
+                                    <div id="selectedStaffsContainer" class="d-flex flex-wrap">
+                                        <!-- Selected staff will be displayed here -->
+                                    </div>
+                                </div>
+
+                                <!-- Image Upload -->
+                                <div class="mb-3">
+                                    <label for="serviceImage" class="form-label">Service Image</label>
+                                    <input type="file" class="form-control" id="serviceImage" name="image">
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <a href="{% url 'services' %}" class="btn-main"
+                                        style="background-color: #000; color: #fff;">Back</a>
+                                    <button type="submit" class="btn-main">Add Service</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- content close -->
+
+    </div>
+
+
+    <!-- Javascript Files
+    ================================================== -->
+    <script src="{% static 'js/plugins.js' %}"></script>
+    <script src="{% static 'js/designesia.js' %}"></script>
+
+    <script>
+        const staffDropdown = document.getElementById('staffAssigned');
+        const selectedStaffsContainer = document.getElementById('selectedStaffsContainer');
+
+        staffDropdown.addEventListener('change', () => {
+            const selectedOptions = Array.from(staffDropdown.selectedOptions);
+            selectedStaffsContainer.innerHTML = ''; // Clear current selections
+
+            selectedOptions.forEach(option => {
+                const staffDiv = document.createElement('div');
+                staffDiv.classList.add('selected-staff', 'badge', 'bg-primary', 'text-white', 'me-2', 'mb-2');
+                staffDiv.setAttribute('data-id', option.value);
+                staffDiv.innerHTML = `
+                    ${option.text} 
+                    <button type="button" class="btn-close btn-close-white ms-2" aria-label="Remove"></button>
+                    <input type="hidden" name="selectedStaffs" value="${option.value}">
+                `;
+
+                staffDiv.querySelector('.btn-close').addEventListener('click', () => {
+                    staffDiv.remove();
+                    staffDropdown.querySelector(`option[value="${option.value}"]`).selected = false;
+                });
+
+                selectedStaffsContainer.appendChild(staffDiv);
+            });
+        });
+    </script>
+
+    {% endblock %}

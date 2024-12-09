@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div id="wrapper">
+        
+    
+    <header class="transparent scroll-light has-topbar">
+        <div id="topbar" class="topbar-dark text-light">
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="de-flex sm-pt10">
+                        <div class="de-flex-col">
+                            <div class="de-flex-col d-flex justify-content-center">
+                                <!-- logo begin -->
+                                <div id="logo">
+                                    <a href="">
+                                        <img class="logo-1" src="images/logo-AUTOASSIST-light.png" alt="logo" style="height: 100px; width: 100px;">
+                                        <img class="logo-2" src="images/logo-AUTOASSIST.png" alt="logo" style="height: 100px; width: 100px;">
+                                    </a>
+                                </div>
+                                <!-- logo close -->
+                            </div>
+                        </div>
+                      
+                        <div class="de-flex-col">
+                            <div class="menu_side_area">
+                                <a href="login.html" class="btn-main">Sign In</a>
+                                <span id="menu-btn"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+     <div class="no-bottom no-top zebra" id="content">
+         <div id="top"></div>
+         
+         <!-- section begin -->
+         <section id="subheader" class="jarallax text-light">
+             <img src="{% static 'images/background/14.jpg' %}" class="jarallax-img" alt="">
+                 <div class="center-y relative text-center">
+                     <div class="container">
+                         <div class="row">
+                             <div class="col-md-12 text-center">
+                                 <h1>Create Profile</h1>
+                             </div>
+                             <div class="clearfix"></div>
+                         </div>
+                     </div>
+                 </div>
+         </section>
+         <!-- section close -->
+
+         <section id="section-cars" class="bg-gray-100">
+             <div class="container d-flex justify-content-center align-items-center">
+                 <div class="col-lg-6 mb30">
+                     <div class="card p-4 rounded-5">
+                         <!-- <h2 class="mb-4">Profile </h2> -->
+                         <form>
+                             <!-- Business Name Field -->
+                             <div class="form-floating mb-3">
+                                 <input type="text" class="form-control" id="business-name" placeholder="Business Name">
+                                 <label for="business-name">Business Name</label>
+                             </div>
+
+                             <!-- Business Email Field -->
+                             <div class="form-floating mb-3">
+                                 <input type="email" class="form-control" id="business-email" placeholder="Business Email">
+                                 <label for="business-email">Business Email</label>
+                             </div>
+
+                             <!-- Business Contact Field -->
+                             <div class="form-floating mb-3">
+                                 <input type="text" class="form-control" id="business-contact" placeholder="Business Contact">
+                                 <label for="business-contact">Business Contact</label>
+                             </div>
+
+                             <!-- Address Subheading -->
+                             <h5 class="mb-3 mt-4">Address</h5>
+
+                             <!-- Address Fields -->
+                             <div class="form-floating mb-3">
+                                 <input type="text" class="form-control" id="street" placeholder="Street">
+                                 <label for="street">Street</label>
+                             </div>
+
+                             <div class="form-floating mb-3">
+                                 <input type="text" class="form-control" id="city" placeholder="City">
+                                 <label for="city">City</label>
+                             </div>
+
+                             <div class="form-floating mb-3">
+                                 <select class="form-select" id="province">
+                                     <option selected disabled>Choose Province</option>
+                                     <option>Alberta</option>
+                                     <option>British Columbia</option>
+                                     <option>Manitoba</option>
+                                     <option>New Brunswick</option>
+                                     <option>Newfoundland and Labrador</option>
+                                     <option>Nova Scotia</option>
+                                     <option>Ontario</option>
+                                     <option>Prince Edward Island</option>
+                                     <option>Quebec</option>
+                                     <option>Saskatchewan</option>
+                                 </select>
+                                 <label for="province">Province</label>
+                             </div>
+
+                             <div class="form-floating mb-3">
+                                 <input type="text" class="form-control" id="postal-code" placeholder="Postal Code">
+                                 <label for="postal-code">Postal Code</label>
+                             </div>
+
+                             <!-- Description Field -->
+                             <div class="form-floating mb-3">
+                                 <textarea class="form-control" id="description" placeholder="Description" style="height: 100px;"></textarea>
+                                 <label for="description">Description</label>
+                             </div>
+
+                             <!-- Submit Button -->
+                             <button type="submit" class="btn btn-primary w-100">Save Profile</button>
+                         </form>
+
+                     </div>
+                 </div>
+             </div>
+             
+         </section>
+         
+         
+     </div>
+     <!-- content close -->        
+     
+ </div>
+
+
+ <!-- Javascript Files
+ ================================================== -->
+ <script src="js/plugins.js"></script>
+ <script src="js/designesia.js"></script>
+    {% endblock %}

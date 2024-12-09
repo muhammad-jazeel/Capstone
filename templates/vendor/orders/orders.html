@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div id="wrapper">
+    {% include 'includes/navbar.html' %}
+    <div class="no-bottom no-top zebra" id="content">
+        <div id="top"></div>
+
+        <!-- Section for header -->
+        <section id="subheader" class="jarallax text-light">
+            <img src="{% static 'images/background/14.jpg' %}" class="jarallax-img" alt="">
+            <div class="center-y relative text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h1>All Orders</h1>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Section close -->
+
+        <section id="section-cars" class="bg-gray-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 mb30">
+                        {% include 'includes/sidebar.html' %}
+                    </div>
+
+                    <div class="col-lg-9">
+                        <div class="card p-4 rounded-5 mb25">
+                            <h4>Search and Filter Orders</h4>
+                            <form method="GET" class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <input type="text" name="search" class="form-control" placeholder="Search by Customer or Product" value="{{ search_query }}">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="date" name="start_date" class="form-control" value="{{ start_date }}">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="date" name="end_date" class="form-control" value="{{ end_date }}">
+                                </div>
+                                <div class="col-md-2">
+                                    <select name="status" class="form-control">
+                                        <option value="">All Statuses</option>
+                                        <option value="confirmed" {% if status_filter == 'confirmed' %}selected{% endif %}>Confirmed</option>
+                                        <option value="picked_up" {% if status_filter == 'picked_up' %}selected{% endif %}>Picked Up</option>
+                                        <option value="cancelled" {% if status_filter == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn-main">Filter</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="card p-4 rounded-5 mb25">
+                            <h4>All Orders</h4>
+                            <table class="table de-table">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Total Price</th>
+                                        <th>Pickup Date</th>
+                                        <th>Pickup Time</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if vendor_orders %}
+                                        {% for order in vendor_orders %}
+                                        <tr>
+                                            <td>#{{ order.id }}</td>
+                                            <td>{{ order.customer.first_name }} {{ order.customer.last_name }}</td>
+                                            <td>{{ order.product.name }}</td>
+                                            <td>{{ order.quantity }}</td>
+                                            <td>${{ order.total_price }}</td>
+                                            <td>{{ order.pickup_date }}</td>
+                                            <td>{{ order.pickup_time }}</td>
+                                            <td>
+                                                <span class="badge 
+                                                    {% if order.status == 'confirmed' %} bg-success
+                                                    {% elif order.status == 'picked_up' %} bg-primary
+                                                    {% else %} bg-danger {% endif %}">
+                                                    {{ order.status|title }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="8" class="text-center text-muted">No orders found.</td>
+                                        </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+{% endblock %}

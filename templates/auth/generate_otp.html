@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div id="wrapper">
+    <div class="no-bottom no-top zebra" id="content">
+        <div id="top"></div>
+
+        <!-- Section for OTP Generation -->
+        <section id="otp-generation" class="bg-gray-100">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+                        <div class="card p-4 rounded-5 text-center">
+                            <h4 class="mb-4">OTP Sent</h4>
+                            <p>An OTP has been sent to your email: <strong>{{ email }}</strong>.</p>
+                            <p>Please check your email and verify the OTP.</p>
+
+                            <!-- Resend OTP Form -->
+                            <form method="post" action="{% url 'generate_otp' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-main">Resend OTP</button>
+                            </form>
+
+                            <!-- Navigate to OTP Verification -->
+                            <div class="mt-4">
+                                <a href="{% url 'verify_otp' %}" class="btn-secondary">Verify OTP</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% load static %}
+<header class="transparent scroll-light has-topbar">
+    <div id="topbar" class="topbar-dark text-light"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="de-flex sm-pt10">
+                    <div class="de-flex-col">
+                        <!-- logo begin -->
+                        <div id="logo">
+                            <a href="{% url 'dashboard' %}">
+                                <img class="logo-1" src="{% static 'images/logo-AUTOASSIST-light.png' %}" alt="logo" style="height: 100px; width: 100px;">
+                                <img class="logo-2" src="{% static 'images/logo-AUTOASSIST.png' %}" alt="logo" style="height: 100px; width: 100px;">
+                            </a>
+                        </div>
+                        <!-- logo close -->
+                    </div>
+                    <div class="de-flex-col header-col-mid">
+                        <ul id="mainmenu">
+                            <li><a class="menu-item" href="{% url 'dashboard' %}">Dashboard</a></li>
+                            <li><a class="menu-item" href="">Services</a>   
+                                <ul>
+                                    <li><a class="menu-item" href="">Add Services</a></li>
+                                </ul>                            
+                            </li>
+                            <li><a class="menu-item" href="">Products</a>
+                                <ul>
+                                    <li><a class="menu-item" href="">Add Products</a></li>
+                                </ul>
+                            </li>
+                            <li><a class="menu-item" href="">My Orders</a></li>
+                            {% if request.user.is_authenticated %}
+                                <li><a class="menu-item" href="{% url 'logout' %}">Logout</a></li>
+                            {% else %}
+                                <li><a class="menu-item" href="#">Login/Signup</a>
+                                    <ul>
+                                        <li><a class="menu-item" href="{% url 'login' %}">Login</a></li>
+                                        <li><a class="menu-item" href="{% url 'register' %}">Register</a></li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="de-flex-col">
+                        <div class="menu_side_area">
+                            {% if request.user.is_authenticated %}
+                                <a href="{% url 'logout' %}" class="btn-main">Sign Out</a>
+                            {% else %}
+                                <a href="{% url 'login' %}" class="btn-main">Sign In</a>
+                            {% endif %}
+                            <span id="menu-btn"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

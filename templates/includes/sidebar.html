@@ -1,0 +1,63 @@
+{% load static %}
+<div class="card p-4 rounded-5">
+    <div class="profile-info mb-3 text-center">
+        <h4>
+            {{ request.user.vendor.business_name }}
+        </h4>
+        <p class="text-gray">{{ request.user.email }}</p>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <ul class="menu-col">
+        <li>
+            <a href="{% url 'dashboard' %}" class="{% if request.path|slice:':10' == '/dashboard' %}active{% endif %}">
+                <i class="fa fa-home"></i> Dashboard
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'profile_view' %}" class="{% if '/users/profile_view/' in request.path %}active{% endif %}">
+                <i class="fa-regular fa-id-badge"></i> Profile
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'vendor_bookings' %}" class="{% if '/reservations/bookings/' in request.path %}active{% endif %}">
+                <i class="fa fa-calendar-alt"></i> All Bookings
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'vendor_orders' %}" class="{% if request.path|slice:':7' == '/orders' %}active{% endif %}">
+                <i class="fa-solid fa-cart-plus"></i> Orders
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'services' %}" class="{% if request.path|slice:':9' == '/services' %}active{% endif %}">
+                <i class="fa-solid fa-screwdriver-wrench"></i> Services
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'staffs' %}" class="{% if request.path|slice:':7' == '/staffs' %}active{% endif %}">
+                <i class="fa fa-users"></i> Staffs
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'departments' %}" class="{% if request.path|slice:':12' == '/departments' %}active{% endif %}">
+                <i class="fa fa-users"></i> Departments
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'list_categories' %}" class="{% if '/products/categories/' in request.path %}active{% endif %}">
+                <i class="fa fa-list-alt"></i> Categories
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'products' %}" class="{% if '/products/products/' in request.path %}active{% endif %}">
+                <i class="fa-brands fa-product-hunt"></i> Products
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'logout' %}" class="{% if request.path|slice:':7' == '/logout' %}active{% endif %}">
+                <i class="fa fa-sign-out"></i> Sign Out
+            </a>
+        </li>
+    </ul>
+</div>

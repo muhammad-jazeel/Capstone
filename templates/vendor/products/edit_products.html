@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div id="wrapper">
+    {% include 'includes/navbar.html' %}
+    <div class="no-bottom no-top zebra" id="content">
+        <div id="top"></div>
+
+        <!-- Section for header -->
+        <section id="subheader" class="jarallax text-light">
+            <img src="{% static 'images/background/14.jpg' %}" class="jarallax-img" alt="">
+            <div class="center-y relative text-center">
+                <div class="container">
+                    <h1>Edit Product</h1>
+                </div>
+            </div>
+        </section>
+
+        <!-- Edit Product Form Section -->
+        <section id="section-edit-product" class="bg-gray-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 mb30">
+                        {% include 'includes/sidebar.html' %}
+                    </div>
+                    <div class="col-lg-9">
+                        <!-- Display Success/Error Messages -->
+                        {% if messages %}
+                            <div class="mb-4">
+                                {% for message in messages %}
+                                    {% if "error" in message.tags %}
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            {{ message }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    {% elif "success" in message.tags %}
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                            {{ message }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <div class="card p-4 rounded-5">
+                            <form method="post" action="{% url 'edit_product' product.id %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group mb-3">
+                                    <label for="name" class="form-label">Product Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" value="{{ product.name }}" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="description" class="form-label">Description</label>
+                                    <textarea class="form-control" id="description" name="description" rows="4" required>{{ product.description }}</textarea>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="price" class="form-label">Price</label>
+                                    <input type="number" step="0.01" class="form-control" id="price" name="price" value="{{ product.price }}" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="stock_quantity" class="form-label">Stock Quantity</label>
+                                    <input type="number" class="form-control" id="stock_quantity" name="stock_quantity" value="{{ product.stock_quantity }}" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="category" class="form-label">Category</label>
+                                    <select class="form-control" id="category" name="category" required>
+                                        {% for category in categories %}
+                                            <option value="{{ category.id }}" {% if category.id == product.category.id %}selected{% endif %}>
+                                                {{ category.name }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="image" class="form-label">Product Image</label>
+                                    {% if product.image %}
+                                        <p>Current Image:</p>
+                                        <img src="{{ product.image.url }}" class="img-thumbnail mb-3" alt="{{ product.name }}">
+                                    {% endif %}
+                                    <input type="file" class="form-control-file" id="image" name="image">
+                                </div>
+                                <div class="text-center mt-4">
+                                    <button type="submit" class="btn-main">Update Product</button>
+                                    <a href="{% url 'products' %}" class="btn-secondary">Cancel</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+{% endblock %}

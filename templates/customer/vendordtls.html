@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <div id="wrapper">
+
+        <!-- Page Preloader -->
+        <div id="de-preloader"></div>
+
+        <!-- Header Begin -->
+        <header class="transparent scroll-light has-topbar">
+            <div id="topbar" class="topbar-dark text-light"></div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="de-flex sm-pt10">
+                            <div class="de-flex-col">
+                                <div class="de-flex-col">
+                                    <!-- Logo Begin -->
+                                    <div id="logo">
+                                        <a href="index.html">
+                                            <img class="logo-1" src="{% static 'images/logo-AUTOASSIST-light.png' %}" alt="logo" style="height: 100px; width: 100px;">
+                                            <img class="logo-2" src="{% static 'images/logo-AUTOASSIST.png' %}" alt="logo" style="height: 100px; width: 100px;">
+                                        </a>
+                                    </div>
+                                    <!-- Logo Close -->
+                                </div>
+                            </div>
+                            <div class="de-flex-col header-col-mid">
+                                <ul id="mainmenu">
+                                    <li><a class="menu-item" href="index.html">Home</a></li>
+                                    <li><a class="menu-item" href="cars.html">Services</a></li>
+                                    <li><a class="menu-item" href="quick-booking.html">Booking</a>
+                                        <ul>
+                                            <li><a class="menu-item new" href="quick-booking.html">Quick Booking</a></li>
+                                            <li><a class="menu-item" href="booking.html">Booking</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a class="menu-item" href="account-dashboard.html">My Account</a></li>
+                                    <li><a class="menu-item" href="about.html">About Us</a></li>
+                                    <li><a class="menu-item" href="contact.html">Contact</a></li>
+                                </ul>
+                            </div>
+                            <div class="de-flex-col">
+                                <div class="menu_side_area">
+                                    <a href="login.html" class="btn-main">Sign In</a>
+                                    <span id="menu-btn"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Header Close -->
+
+        <!-- Content Begin -->
+        <div class="no-bottom no-top zebra" id="content">
+            <div id="top"></div>
+
+            <!-- Section Begin -->
+            <section id="subheader" class="jarallax text-light">
+                <img src="{% static 'images/background/2.jpg' %}" class="jarallax-img" alt="">
+                <div class="center-y relative text-center">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12 text-center"></div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Section Close -->
+
+            <section id="section-vendor-details">
+                <div class="container">
+                    <div class="row g-5">
+                        <!-- Vendor Image Slider -->
+                        <div class="col-lg-6">
+                            <div id="slider-carousel" class="owl-carousel">
+                                <div class="item">
+                                    <img src="{% static 'images/services/speedyautocare.jpg' %}" alt="Vendor Image 1">
+                                </div>
+                                <div class="item">
+                                    <img src="{% static 'images/services/Speedyauto.webp' %}" alt="Vendor Image 2">
+                                </div>
+                                <div class="item">
+                                    <img src="{% static 'images/services/speedy auto care1.webp' %}" alt="Vendor Image 3">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Vendor Information -->
+                        <div class="col-lg-3">
+                            <h3>Speedy Auto Care</h3>
+                            <p>Speedy Auto Care specializes in quick, reliable vehicle maintenance services. With certified technicians and advanced equipment, we ensure high-quality care for your vehicle.</p>
+                            <div class="spacer-10"></div>
+                            <h4>Vendor Details</h4>
+                            <div class="de-spec">
+                                <div class="d-row">
+                                    <span class="d-title">Services Offered</span>
+                                    <span class="d-value">Oil Change, Tire Rotation, Brake Inspection</span>
+                                </div>
+                                <div class="d-row">
+                                    <span class="d-title">Location</span>
+                                    <span class="d-value">123 Main St, Kitchener, ON</span>
+                                </div>
+                                <div class="d-row">
+                                    <span class="d-title">Operating Hours</span>
+                                    <span class="d-value">Mon-Fri, 8:00 AM - 6:00 PM</span>
+                                </div>
+                                <div class="d-row">
+                                    <span class="d-title">Contact</span>
+                                    <span class="d-value">+1 (123) 456-7890</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer Begin -->
+        <footer class="text-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <h5>About Our Service</h5>
+                        <p>Your trusted partner for vehicle maintenance and repair.</p>
+                    </div>
+                    <div class="col-lg-3">
+                        <h5>Contact Info</h5>
+                        <address class="s1">
+                            <span><i class="id-color fa fa-map-marker fa-lg"></i>548, Thorndale Drive, Kitchener, ON</span>
+                            <span><i class="id-color fa fa-phone fa-lg"></i>+1 123 456 7890</span>
+                            <span><i class="id-color fa fa-envelope-o fa-lg"></i><a href="mailto:carservice@gmail.com">carservice@gmail.com</a></span>
+                        </address>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Footer Close -->
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="{% static 'js/plugins.js' %}"></script>
+    <script src="{% static 'js/designesia.js' %}"></script>
+    {% endblock %}
+

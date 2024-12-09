@@ -1,0 +1,289 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div id="wrapper">
+    <!-- page preloader begin -->
+<div id="de-preloader"></div>
+<!-- page preloader close -->
+
+<!-- header begin -->
+<header class="transparent scroll-light has-topbar">
+    <div id="topbar" class="topbar-dark text-light"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="de-flex sm-pt10">
+                    <div class="de-flex-col">
+                        <div class="de-flex-col">
+                            <!-- logo begin -->
+                            <div id="logo">
+                                <a href="{% url 'homepage' %}">
+                                    <img class="logo-1" src="{% static 'images/logo-AUTOASSIST-light.png' %}" alt="logo" style="height: 100px; width: 100px;">
+                                    <img class="logo-2" src="{% static 'images/logo-AUTOASSIST.png' %}" alt="logo" style="height: 100px; width: 100px;">
+                                </a>
+                            </div>
+                            <!-- logo close -->
+                        </div>
+                    </div>
+                    {% include 'includes/customer_navbar.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+    <div class="no-bottom no-top" id="content">
+        <div id="top"></div>
+
+        <!-- Hero Section -->
+        <section id="section-hero" aria-label="section" class="jarallax text-light">
+            <img src="{% static 'images/background/2.jpg' %}" class="jarallax-img" alt="">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-12 text-light">
+                        <div class="spacer-double"></div>
+                        <div class="spacer-double"></div>
+                        <h1 class="mb-2">Looking for a <span class="id-color">vehicle Service</span>? You're at the right place.</h1>
+                        <div class="spacer-single"></div>
+                        <div class="row">
+                            <!-- Left Column: Card Wrapper -->
+                            <div class="col-lg-6">
+                                <div class="card shadow-soft" style="background-color: white; border-radius: 10px; border: none;">
+                                    <div class="card-body p-4">
+                                        <div class="spacer-single sm-hide"></div>
+                                        <div class="rounded-3" style="background-color: rgba(255, 255, 255, 0.9); color: black;">
+                                            <form name="contactForm" id="contact_form" method="get" action="{% url 'homepage' %}">
+                                                <div id="step-1" class="row" style="color: black !important;">
+                                                    <!-- Business Name Section -->
+                                                    <div class="col-lg-12 mb-4">
+                                                        <h5 style="color: black !important;">Business Name</h5>
+                                                        <input 
+                                                            type="text" 
+                                                            name="business_name" 
+                                                            placeholder="Enter business name" 
+                                                            id="business_name_input" 
+                                                            autocomplete="off" 
+                                                            class="form-control search-field" 
+                                                            value="{{ business_name|default:'' }}">
+                                                    </div>
+
+                                                    <!-- Service Type Section -->
+                                                    <div class="col-lg-6 mb-4">
+                                                        <h5 style="color: black !important;">Service Type</h5>
+                                                        <input 
+                                                            type="text" 
+                                                            name="service_type" 
+                                                            placeholder="Enter service type" 
+                                                            id="service_type_input" 
+                                                            autocomplete="off" 
+                                                            class="form-control search-field" 
+                                                            value="{{ service_type|default:'' }}">
+                                                    </div>
+
+                                                    <!-- City Section -->
+                                                    <div class="col-lg-6 mb-4">
+                                                        <h5 style="color: black !important;">City</h5>
+                                                        <input 
+                                                            type="text" 
+                                                            name="city" 
+                                                            placeholder="Enter city" 
+                                                            id="city_input" 
+                                                            autocomplete="off" 
+                                                            class="form-control search-field" 
+                                                            value="{{ city|default:'' }}">
+                                                    </div>
+
+                                                    <!-- Submit Button -->
+                                                    <div class="col-lg-12">
+                                                        <button 
+                                                            type="submit" 
+                                                            id="send_message" 
+                                                            class="btn-main btn-sm" 
+                                                            style="padding: 10px 20px; font-size: 16px; float: right;">
+                                                            Find Services
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column: Container Timeline -->
+                            <div class="col-lg-6">
+                                <div class="container-timeline text-light">
+                                    <ul>
+                                        <li>
+                                            <h4>Pick up a location</h4>
+                                            <p>Pick your ideal location and let us take care of the rest.</p>
+                                        </li>
+                                        <li>
+                                            <h4>Make a booking</h4>
+                                            <p>Secure your reservation with ease, unlocking a world of possibilities and embarking on your next adventure with confidence.</p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="spacer-double"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section id="section-cars">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 offset-lg-3 text-center">
+                        {% if business_name %}
+                            <h2>Vendors matching "{{ business_name }}"</h2>
+                        {% elif service_type %}
+                            <h2>Service Providers for "{{ service_type }}"</h2>
+                        {% elif city %}
+                            <h2>Services in {{ city }} ({{ vendors|length }} vendors found)</h2>
+                        {% else %}
+                            <h2>Services near you</h2>
+                        {% endif %}
+                        <div class="spacer-20"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    {% for vendor in vendors %}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card shadow-lg" style="border-radius: 12px; overflow: hidden; border: 1px solid #dee2e6; background-color: #ffffff;">
+                            <!-- Vendor Image -->
+                            {% with vendor.user.store_images.all|first as store_image %}
+                                {% if store_image %}
+                                <img src="{{ store_image.image.url }}" class="card-img-top" alt="{{ vendor.business_name }}" style="height: 200px; object-fit: cover;">
+                                {% else %}
+                                <img src="{% static 'images/vendors/default_vendor_image.jpg' %}" class="card-img-top" alt="Default Image" style="height: 200px; object-fit: cover;">
+                                {% endif %}
+                            {% endwith %}
+                            <!-- Card Body -->
+                            <div class="card-body" style="background: #f8f9fa;">
+                                <h5 class="card-title text-primary" style="font-weight: bold; color: #0056b3;">{{ vendor.business_name }}</h5>
+                                <p class="card-text mb-2">
+                                    <strong>Address:</strong> {{ vendor.address }}
+                                </p>
+                                <p class="card-text">
+                                    <strong>Description:</strong> 
+                                    {{ vendor.description|truncatechars:100 }}
+                                </p>
+                            </div>
+                            <!-- Card Footer -->
+                            <div class="card-footer text-center" style="background: #f8f9fa; border-top: 1px solid #e9ecef;">
+                                <a class="btn-main" href="{% url 'vendor_details' vendor.id %}" style="padding: 10px 20px; font-size: 16px;">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% empty %}
+                    <div class="col-lg-12 text-center">
+                        <p>No vendors found for the given search criteria.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+{% include 'includes/footer.html' %}
+<!-- Footer Close -->
+
+
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+<!-- CSS for Auto-Complete -->
+<style>
+.ui-autocomplete {
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #fff;
+    border: 1px solid #ccc;
+    z-index: 1050;
+}
+
+.ui-menu-item {
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+.ui-menu-item:hover {
+    background: #f8f9fa;
+    color: #007bff;
+}
+
+.search-field {
+    background: #f8f9fa;
+    border: 2px solid #6c757d;
+    border-radius: 12px;
+    font-size: 16px;
+    padding: 12px 15px;
+    color: #212529 !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.search-field:focus {
+    background: #ffffff;
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.6);
+    outline: none;
+}
+
+.card {
+    border-radius: 12px; /* Smooth rounded corners */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15); /* Enhanced shadow for depth */
+    overflow: hidden; /* Ensures no elements overflow the card */
+    background-color: #ffffff; /* Bright background for contrast */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth hover effects */
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2); /* Larger shadow on hover */
+}
+
+.card-body {
+    padding: 15px; /* Comfortable padding inside the card */
+    background: #f8f9fa; /* Light grey background for the body */
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #0056b3; /* Vibrant text color for titles */
+    margin-bottom: 8px; /* Reduce spacing below title */
+}
+
+.card-text {
+    font-size: 14px;
+    color: #6c757d; /* Subtle text color for descriptions */
+}
+
+.card-footer {
+    background: #f8f9fa; /* Matches card body for cohesive look */
+    border-top: 1px solid #dee2e6; /* Slightly darker border for separation */
+}
+
+.btn-main {
+    background-color: #007bff; /* Primary button color */
+    color: #ffffff;
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effects */
+}
+
+.btn-main:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow on hover */
+}
+</style>
+
+{% endblock %}

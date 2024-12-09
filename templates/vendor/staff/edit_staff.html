@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div id="wrapper">
+    <!-- header begin -->
+    {% include 'includes/navbar.html' %}
+    <!-- header close -->
+    <!-- content begin -->
+    <div class="no-bottom no-top zebra" id="content">
+        <div id="top"></div>
+
+        <!-- section begin -->
+        <section id="subheader" class="jarallax text-light">
+            <img src="{% static 'images/background/14.jpg' %}" class="jarallax-img" alt="">
+            <div class="center-y relative text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h1>Edit Staff</h1>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- section close -->
+
+        <section id="section-edit-staff" class="bg-gray-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 mb30">
+                        {% include 'includes/sidebar.html' %}
+                    </div>
+                    <div class="col-lg-9">
+                        <div class="card p-4 rounded-5">
+                            <form method="post" action="{% url 'edit_staff' staff.id %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="first_name">First Name</label>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" value="{{ staff.first_name }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="last_name">Last Name</label>
+                                    <input type="text" class="form-control" id="last_name" name="last_name" value="{{ staff.last_name }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" value="{{ staff.email }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone_number">Phone Number</label>
+                                    <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ staff.phone_number }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="departments">Departments</label>
+                                    <select class="form-control" id="departments" name="departments" multiple>
+                                        {% for department in departments %}
+                                            <option value="{{ department.id }}" {% if department in staff.departments.all %}selected{% endif %}>
+                                                {{ department.name }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="current_image">Current Image</label>
+                                    {% if staff.image %}
+                                        <img src="{{ staff.image.url }}" alt="Staff Image" class="img-fluid mb-3" style="max-width: 200px;">
+                                    {% else %}
+                                        <p>No image uploaded.</p>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="image">Upload New Image</label>
+                                    <input type="file" class="form-control" id="image" name="image">
+                                    <small class="text-muted">Leave blank if you do not want to change the image.</small>
+                                </div>
+                                
+                                <div class="text-center mt-4">
+                                    <button type="submit" class="btn-main">Update Staff</button>
+                                </div>
+                            </form>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+{% endblock %}

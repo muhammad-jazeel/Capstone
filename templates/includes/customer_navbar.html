@@ -1,0 +1,18 @@
+{% load static %}
+
+<div class="de-flex-col header-col-mid">
+    <ul id="mainmenu">
+        <li><a class="menu-item" href="{% url 'homepage' %}">Home</a></li>
+        <li><a class="menu-item" href="{% url 'customer_dashboard' %}">My Account</a></li>
+    </ul>
+</div>
+<div class="de-flex-col">
+    <div class="menu_side_area">
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'logout' %}" class="btn-main">Sign Out</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn-main">Sign In</a>
+        {% endif %}
+        <span id="menu-btn"></span>
+    </div>
+</div>

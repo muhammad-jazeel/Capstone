@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div id="wrapper">
+    {% include 'includes/navbar.html' %}
+    <div class="no-bottom no-top zebra" id="content">
+        <div id="top"></div>
+
+        <!-- Section for header -->
+        <section id="subheader" class="jarallax text-light">
+            <img src="{% static 'images/background/14.jpg' %}" class="jarallax-img" alt="">
+            <div class="center-y relative text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h1>All Bookings</h1>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Section close -->
+
+        <section id="section-cars" class="bg-gray-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 mb30">
+                        {% include 'includes/sidebar.html' %}
+                    </div>
+
+                    <div class="col-lg-9">
+                        <div class="card p-4 rounded-5 mb25">
+                            <h4>Search and Filter Bookings</h4>
+                            <form method="GET" class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <input type="text" name="search" class="form-control" placeholder="Search by Customer, Service, or Registration" value="{{ search_query }}">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="date" name="start_date" class="form-control" value="{{ start_date }}">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="date" name="end_date" class="form-control" value="{{ end_date }}">
+                                </div>
+                                <div class="col-md-2">
+                                    <!-- Use the existing button class -->
+                                    <button type="submit" class="btn-main">Filter</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="card p-4 rounded-5 mb25">
+                            <h4>All Bookings</h4>
+                            <table class="table de-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Booking ID</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Customer</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Service</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Date</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Time Slot</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Car Registration</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Total Price</span></th>
+                                        <th scope="col"><span class="text-uppercase fs-12 text-gray">Status</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if vendor_reservations %}
+                                        {% for booking in vendor_reservations %}
+                                        <tr>
+                                            <td>
+                                                <div class="badge bg-gray-100 text-dark">#{{ booking.id }}</div>
+                                            </td>
+                                            <td>{{ booking.customer.first_name }} {{ booking.customer.last_name }}</td>
+                                            <td>{{ booking.service.name }}</td>
+                                            <td>{{ booking.service_date }}</td>
+                                            <td>{{ booking.time_slot.time }}</td>
+                                            <td>{{ booking.car_registration }}</td>
+                                            <td>${{ booking.total_price }}</td>
+                                            <td>
+                                                <div class="badge 
+                                                    {% if booking.status == 'confirmed' %} bg-success
+                                                    {% elif booking.status == 'pending' %} bg-warning
+                                                    {% elif booking.status == 'completed' %} bg-primary
+                                                    {% else %} bg-danger {% endif %}">
+                                                    {{ booking.status|title }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="8" class="text-center text-muted">No bookings found.</td>
+                                        </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+{% endblock %}

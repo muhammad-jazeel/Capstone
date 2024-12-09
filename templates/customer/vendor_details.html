@@ -1,0 +1,239 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div id="wrapper">
+    <!-- page preloader begin -->
+    <div id="de-preloader"></div>
+    <!-- page preloader close -->
+
+    <header class="transparent scroll-light has-topbar">
+        <div id="topbar" class="topbar-dark text-light"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="de-flex sm-pt10">
+                        <div class="de-flex-col">
+                            <div class="de-flex-col">
+                                <!-- Logo Begin -->
+                                <div id="logo">
+                                    <a href="index.html">
+                                        <img class="logo-1" src="{% static 'images/logo-AUTOASSIST-light.png' %}"
+                                            alt="logo" style="height: 100px; width: 100px;">
+                                        <img class="logo-2" src="{% static 'images/logo-AUTOASSIST.png' %}" alt="logo"
+                                            style="height: 100px; width: 100px;">
+                                    </a>
+                                </div>
+                                <!-- Logo Close -->
+                            </div>
+                        </div>
+                        {% include 'includes/customer_navbar.html' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="no-bottom no-top zebra" id="content">
+        <div id="top"></div>
+
+        <!-- section begin -->
+        <section id="subheader" class="jarallax text-light">
+            <img src="{% static 'images/background/2.jpg' %}" class="jarallax-img" alt="">
+            <div class="center-y relative text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center"></div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- section close -->
+
+        <section id="section-vendor-details">
+            <div class="container">
+                <div class="row g-5">
+                    <!-- Vendor Image Slider -->
+                    <div class="col-lg-6">
+                        <div id="slider-carousel" class="owl-carousel">
+                            {% for image in store_images %}
+                            <div class="item">
+                                <img src="{{ image.image.url }}" alt="Vendor Image">
+                            </div>
+                            {% empty %}
+                            <div class="item">
+                                <img src="{% static 'images/vendors/default_vendor_image.jpg' %}"
+                                    alt="Default Vendor Image">
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Vendor Details Section -->
+                    <div class="col-lg-6">
+                        <h3>{{ vendor.business_name }}</h3>
+                        <p>{{ vendor.description }}</p>
+
+                        <h4>Vendor Details</h4>
+                        <div class="de-spec">
+                            
+                            <div class="d-row">
+                                <span class="d-title">Location</span>
+                                <span class="d-value">{{ vendor.address }}</span>
+                            </div>
+                            <div class="d-row">
+                                <span class="d-title">Operating Hours</span>
+                                <span class="d-value">{{ vendor.operating_hours }}</span>
+                            </div>
+                            <div class="d-row">
+                                <span class="d-title">Contact</span>
+                                <span class="d-value">{{ vendor.business_contact }}</span>
+                            </div>
+                            <div class="d-row">
+                                <span class="d-title">Customer Rating</span>
+                                <span class="d-value">{{ vendor.rating|default:"N/A" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="section-services" class="py-5">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2>Services</h2>
+                </div>
+                <div class="row">
+                    {% for service in services %}
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="de-item mb30">
+                            <div class="d-img" style="position: relative; overflow: hidden;">
+                                {% if service.image %}
+                                <img src="{{ service.image.url }}" class="img-fluid service-image"
+                                    alt="{{ service.name }}">
+                                {% else %}
+                                <img src="{% static 'images/services/default_service_image.jpg' %}"
+                                    class="img-fluid service-image" alt="Default Service Image">
+                                {% endif %}
+                            </div>
+                            <div class="d-info">
+                                <div class="d-text">
+                                    <h4>{{ service.name }}</h4>
+                                    <div class="d-atr-group">
+                                        <span class="d-atr">
+                                            <img src="{% static 'images/icons/1-green.svg' %}" alt="">
+                                            7
+                                        </span>
+                                        <span class="d-atr">
+                                            <i class="fas fa-clock"></i>
+                                            {{ service.duration_minutes }} mins
+                                        </span>
+                                    </div>
+                                    <div class="d-price">
+                                        Service rate from <span>${{ service.price }}</span>
+                                        <a class="btn-main" href="{% url 'customer_booking' service.id %}">Book Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12 text-center">
+                        <p>No services available for this vendor.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <section id="section-products" class="py-5">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2>In-Store Products</h2>
+                </div>
+                <div class="row">
+                    {% for product in products %}
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="de-item mb30">
+                            <div class="d-img" style="position: relative; overflow: hidden;">
+                                {% if product.image %}
+                                <img src="{{ product.image.url }}" class="img-fluid product-image" alt="{{ product.name }}">
+                                {% else %}
+                                <img src="{% static 'images/products/default_product_image.jpg' %}" class="img-fluid product-image"
+                                    alt="Default Product Image">
+                                {% endif %}
+                            </div>
+                            <div class="d-info">
+                                <div class="d-text">
+                                    <h4>{{ product.name }}</h4>
+                                    <div class="d-price">
+                                        Price: <span>${{ product.price }}</span>
+                                    
+                                    </div>
+                                    
+                                    <div class="row mt-2">
+                                        <div class="col-12">
+                                            <a class="btn-main btn-vertical" href="{% url 'store_pickup' product.id %}">Store Pickup</a>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12 text-center">
+                        <p>No products available for this vendor.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        
+
+    </div>
+</div>
+
+{% include 'includes/footer.html' %}
+
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+
+<style>
+    .service-image {
+        width: 100%;
+        /* Ensures the image spans the full width of its container */
+        height: 150px;
+        /* Sets a fixed height for all images */
+        object-fit: cover;
+        /* Ensures the image scales to fit the container while maintaining aspect ratio */
+        border-radius: 10px;
+        /* Adds a slight rounding to the image edges */
+        display: block;
+        margin: auto;
+    }
+
+    .product-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .product-card .btn-main {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
+    .btn-vertical {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px; /* Space between buttons */
+}
+</style>
+{% endblock %}

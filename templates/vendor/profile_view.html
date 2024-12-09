@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div id="wrapper">
+    <!-- Include Navbar -->
+    {% include 'includes/navbar.html' %}
+    <div class="no-bottom no-top zebra" id="content">
+        <div id="top"></div>
+
+        <!-- Section for header -->
+        <section id="subheader" class="jarallax text-light">
+            <img src="{% static 'images/background/14.jpg' %}" class="jarallax-img" alt="">
+            <div class="center-y relative text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h1>Profile</h1>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Section close -->
+
+        <!-- Profile Section -->
+        <section id="section-profile" class="bg-gray-100">
+            <div class="container mt-5">
+                <div class="row">
+                    <!-- Sidebar Menu -->
+                    <div class="col-lg-3 mb-4">
+                        {% include 'includes/sidebar.html' %}
+                    </div>
+
+                    <!-- Profile Form and Store Gallery -->
+                    <div class="col-lg-9">
+                        <!-- Profile Update Card -->
+                        <div class="card p-4 rounded-5 mb-4">
+                            <h2 class="mb-4">Store Images</h2>
+                            
+                            <!-- Store Banner Image -->
+                            <div class="mb-4 text-center">
+                                <h4>Banner Image</h4>
+                                {% if store_images|length > 0 %}
+                                    <img src="{{ store_images.0.image.url }}" alt="Banner Image" class="img-fluid rounded mb-3" style="width: 100%; height: 300px; object-fit: cover;">
+                                {% else %}
+                                    <p>No banner image uploaded yet. Upload images below to set a banner image.</p>
+                                {% endif %}
+                            </div>
+
+                            <!-- Store Images Gallery -->
+                            <div class="mb-4">
+                                <h4>Store Images</h4>
+                                <div class="row">
+                                    {% for image in store_images %}
+                                    <div class="col-md-3 position-relative mb-3">
+                                        <div class="image-container">
+                                            <img src="{{ image.image.url }}" alt="Store Image" class="img-fluid rounded" style="height: 100px; width: 100%; object-fit: cover;">
+                                            <form method="post" action="{% url 'remove_image' image.id %}" class="position-absolute top-0 end-0">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn-close btn-close-white p-2 m-2" aria-label="Close"></button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    {% empty %}
+                                    <p>No additional images uploaded yet. Add more images below.</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <!-- Image Upload Form -->
+                            <form method="post" action="{% url 'upload_image' %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="upload-image" class="form-label">Upload Store Images</label>
+                                    <input type="file" class="form-control" id="upload-image" name="image" accept="image/*" required>
+                                </div>
+                                <button type="submit" class="btn-main">Upload</button>
+                            </form>
+                        </div>
+
+                        <!-- Profile Information Update -->
+                        <div class="card p-4 rounded-5">
+                            <h4>Update Profile Information</h4>
+                            <form method="post" action="#">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-6 form-floating mb-3">
+                                        <input type="text" class="form-control" id="business-name" name="business_name" placeholder="Business Name" value="{{ vendor.business_name }}">
+                                        <label for="business-name" style="margin-left: 5px;">Business Name</label>
+                                    </div>
+                                    <div class="col-md-6 form-floating mb-3">
+                                        <input type="email" class="form-control" id="business-email" name="business_email" placeholder="Business Email" value="{{ vendor.business_email }}" disabled>
+                                        <label for="business-email" style="margin-left: 5px;">Business Email</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 form-floating mb-3">
+                                        <input type="text" class="form-control" id="business-contact" name="business_contact" placeholder="Business Contact" value="{{ vendor.business_contact }}">
+                                        <label for="business-contact" style="margin-left: 5px;">Business Contact</label>
+                                    </div>
+                                    <div class="col-md-6 form-floating mb-3">
+                                        <textarea class="form-control" id="business-address" name="address" placeholder="Business Address" disabled>{{ vendor.address }}</textarea>
+                                        <label for="business-address" style="margin-left: 5px;">Business Address</label>
+                                    </div>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <textarea class="form-control" id="business-description" name="description" placeholder="Business Description" style="height: 100px;">{{ vendor.description }}</textarea>
+                                    <label for="business-description">Business Description</label>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="verification-status" class="form-label">Verification Status</label>
+                                    <p id="verification-status">
+                                        {% if vendor.verification_status == 'pending' %}
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        {% elif vendor.verification_status == 'approved' %}
+                                            <span class="badge bg-success">Approved</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Rejected</span>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                                <button type="submit" class="btn-main">Save Profile</button>
+                            </form>
+                        </div>
+
+                        <!-- Password Update Section -->
+                        <div class="card p-4 rounded-5 mt-4">
+                            <h4>Update Password</h4>
+                        
+                            <!-- Display messages -->
+                            {% if messages %}
+                                <div>
+                                    {% for message in messages %}
+                                        <div class="alert 
+                                            {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                                            {{ message }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        
+                            <!-- Password update form -->
+                            <form method="post" action="{% url 'update_vendor_password' %}">
+                                {% csrf_token %}
+                                <div class="form-floating mb-3">
+                                    <input type="password" class="form-control" id="old_password" name="old_password" placeholder="Current Password">
+                                    <label for="old_password">Current Password</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="password" class="form-control" id="new_password" name="new_password" placeholder="New Password">
+                                    <label for="new_password">New Password</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm New Password">
+                                    <label for="confirm_password">Confirm New Password</label>
+                                </div>
+                                <button type="submit" class="btn-main">Update Password</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+{% endblock %}

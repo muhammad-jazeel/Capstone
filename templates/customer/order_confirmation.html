@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div id="wrapper">
+    <!-- Subheader Section -->
+    <section id="subheader" class="jarallax text-light">
+        <img src="{% static 'images/background/2.jpg' %}" class="jarallax-img" alt="Subheader Image">
+        <div class="center-y relative text-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h1 class="fw-bold">Pickup Confirmation</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Confirmation Details Section -->
+    <section id="section-confirmation" class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-lg" style="border-radius: 12px;">
+                        <div class="card-header text-center bg-white border-0" style="border-radius: 12px 12px 0 0;">
+                            <h3 class="fw-bold">Thank You!</h3>
+                            <p>Your pickup has been scheduled successfully.</p>
+                        </div>
+                        <div class="card-body" style="padding: 30px;">
+                            <!-- Order Details -->
+                            <h5 class="mb-3">Order Details</h5>
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <p><strong>Order ID:</strong> {{ order.id }}</p>
+                                    <p><strong>Product Name:</strong> {{ order.product.name }}</p>
+                                    <p><strong>Quantity:</strong> {{ order.quantity }}</p>
+                                    <p><strong>Total Price:</strong> ${{ order.total_price }}</p>
+                                </div>
+                                <div class="col-md-6 text-center">
+                                    {% if order.product.image %}
+                                    <img src="{{ order.product.image.url }}" alt="{{ order.product.name }}" class="img-fluid rounded" style="height: 150px; object-fit: contain;">
+                                    {% else %}
+                                    <img src="{% static 'images/products/default_product_image.jpg' %}" alt="Default Image" class="img-fluid rounded" style="height: 150px; object-fit: contain;">
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Pickup Details -->
+                            <h5 class="mb-3">Pickup Details</h5>
+                            <p><strong>Pickup Date:</strong> {{ order.pickup_date }}</p>
+                            <p><strong>Pickup Time:</strong> {{ order.pickup_time }}</p>
+                            <p><strong>Additional Notes:</strong> {{ order.notes|default:"N/A" }}</p>
+
+                            <!-- Buttons -->
+                            <div class="text-center mt-4">
+                                <a href="{% url 'customer_dashboard' %}" class="btn-main w-100 mb-2">Go to Dashboard</a>
+                                <a href="{% url 'homepage' %}" class="btn-main w-100 mb-2">Back to Homepage</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+{% include 'includes/footer.html' %}
+
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/designesia.js' %}"></script>
+
+<style>
+    /* Subheader Styling */
+    #subheader {
+        background: linear-gradient(to right, #28a745, #007bff);
+        color: white;
+        padding: 50px 0;
+        border-radius: 8px 8px 0 0;
+    }
+
+    /* Card Styling */
+    .card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+        background-color: #fff;
+        color: #333;
+        padding: 20px;
+        text-align: center;
+        border-radius: 12px 12px 0 0;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .fw-bold {
+        font-weight: 600 !important;
+    }
+
+    h5 {
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    p {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 8px;
+    }
+
+    /* Button Styling */
+    .btn-main {
+        background-color: #007bff;
+        color: #fff;
+        font-size: 14px;
+        padding: 8px 16px;
+        border-radius: 6px;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        border: none;
+    }
+
+    .btn-main:hover {
+        background-color: #0056b3;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-main.btn-outline {
+        background-color: #fff;
+        color: #007bff;
+        border: 2px solid #007bff;
+    }
+
+    .btn-main.btn-outline:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+</style>
+{% endblock %}
