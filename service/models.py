@@ -53,7 +53,7 @@ class Service(models.Model):
 
 class TimeSlot(models.Model):
     service = models.ForeignKey('Service', on_delete=models.CASCADE, related_name='time_slots')
-    time = models.TimeField()
+    time = models.TimeField(max_length=8)
 
     def __str__(self):
         return f"{self.service.name} - {self.time}"

@@ -165,4 +165,20 @@ EMAIL_HOST_USER = 'autoassistemail@gmail.com'
 EMAIL_HOST_PASSWORD = 'zvpy isws adyk patj'
 EMAIL_USE_TLS = True
 
+STRIPE_SECRET_KEY = 'sk_test_51QTZMRCkZsCVzVrbDK5F0iZKwyZbXqmtOlRg9TzAttTu8loiFjdSjJ2sdLHgUmbHGEa5GCTm0UVDb1Nvm81uKDo600xQycN3sI'
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51QTZMRCkZsCVzVrbj5RTd0BxzOKjVydxrJ5LQoK1FlIE08chyH1C5HRVHP0Ne9ljeuTa4eXpxIlnpXLjkj16Fk3300GgHNOeiq'
+
+# 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
+
+# # Email Backend
+# EMAIL_BACKEND = "anymail.backends.sendinblue.EmailBackend"
+
+# # Anymail Configuration
+# ANYMAIL = {
+#     "SENDINBLUE_API_KEY": "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",  # Replace with your actual API key
+#     "SENDINBLUE_API_URL": "https://api.sendinblue.com/v3/",
+# }
+
+# # Default From Email
+# DEFAULT_FROM_EMAIL = "autoassistemail@gmail.com"  # Replace with your verified sender email
 
